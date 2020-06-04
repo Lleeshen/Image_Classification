@@ -6,8 +6,17 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+import json
 
 PATH = 'cats_and_dogs_filtered'
+
+os.environ['TF_CONFIG'] = json.dumps({
+    'cluster': {
+        'worker': ["localhost:12345","localhost:123456"]
+    },
+    'task': {'type': 'worker', 'index': 0}
+})
+
 
 train_dir = os.path.join(PATH, 'train')
 validation_dir = os.path.join(PATH, 'validation')
@@ -102,8 +111,10 @@ history = model.fit_generator(
 )
 
 # Visualize training results
-acc = history.history['acc']
-val_acc = history.history['val_acc']
+# acc = history.history['acc']
+# val_acc = history.history['val_acc']
+acc = history.history['accuracy']
+val_acc = history.history['val_accuracy']
 
 loss=history.history['loss']
 val_loss=history.history['val_loss']
